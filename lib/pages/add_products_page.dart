@@ -43,8 +43,8 @@ class AddProductsPage extends StatelessWidget {
                   category: categoryController.text,
                 );
 
-                cubit.postProduct(product); // ✅ إضافة المنتج
-                Navigator.of(context).pop(); // رجوع للـ Home
+                cubit.postProduct(product);
+                Navigator.of(context).pop();
               },
               style: ElevatedButton.styleFrom(
                 fixedSize: const Size(350, 50),
@@ -54,7 +54,7 @@ class AddProductsPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16),
                 ),
               ),
-              child: const Text('Add Product', style: TextStyle(fontSize: 18, color: Colors.white)),
+              child: const Text('Add Product', style: TextStyle(fontSize: 16, color: Colors.white)),
             ),
           ],
         ),

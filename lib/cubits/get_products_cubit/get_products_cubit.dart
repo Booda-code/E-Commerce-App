@@ -30,4 +30,10 @@ class GetProductsCubit extends Cubit<GetProductsStates> {
     products.add(product);
     emit(GetProductsSuccessState(List.from(products)));
   }
+
+  void updateProduct(ProductModel product) {
+    final index = products.indexWhere((element) => element.id == product.id);
+    products[index] = product;
+    emit(GetProductsSuccessState(List.from(products)));
+  }
 }
