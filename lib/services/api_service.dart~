@@ -1,0 +1,15 @@
+import 'package:dio/dio.dart';
+
+class ApiService {
+  final String baseUrl = 'https://fakestoreapi.com';
+  final Dio dio = Dio();
+
+  Future<dynamic> getProducts({
+    required String endpoint,
+    Map<String, dynamic>? headers,
+  }) async {
+    dio.options.headers.addAll(headers ?? {});
+    var response = await dio.get('$baseUrl/$endpoint');
+    return response.data;
+  }
+}
