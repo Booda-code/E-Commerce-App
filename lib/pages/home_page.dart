@@ -5,64 +5,56 @@ import 'package:flutter/material.dart';
 import 'package:ecommerce_app/widgets/custom_product.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-
-@override
-  void initState() {
-   BlocProvider.of<GetProductsCubit>(context).getProducts(productName: 'products');
-  super.initState();
-}
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'E-Commerce App',
-          style: TextStyle(color: Colors.white),
+    return BlocProvider(
+      create: (context) => GetProductsCubit()..getProducts(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            'E-Commerce App',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.deepPurple,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.refresh, color: Colors.white),
+              onPressed: () {
+                var getProductsCubit = BlocProvider.of<GetProductsCubit>(
+                    context);
+                getProductsCubit.getProducts();
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.shopping_cart, color: Colors.white),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return AddProductsPage();
+                    },
+                  ),
+                );
+              },
+            ),
+          ],
         ),
-        backgroundColor: Colors.deepPurple,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh, color: Colors.white),
-            onPressed: () {
-              var getProductsCubit = BlocProvider.of<GetProductsCubit>(context);
-              getProductsCubit.getProducts(productName: 'products');
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.shopping_cart, color: Colors.white),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) {
-                    return AddProductsPage();
-                  },
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-      body: BlocBuilder<GetProductsCubit, GetProductsStates>(
-          builder: (context, state)
-          {
-            if(state is GetProductsLoadingState){
+        body: BlocBuilder<GetProductsCubit, GetProductsStates>(
+          builder: (context, state) {
+            if (state is GetProductsLoadingState) {
               return const Center(child: CircularProgressIndicator(
                 color: Colors.black,
               ),);
-            } else if(state is GetProductsSuccessState){
+            } else if (state is GetProductsSuccessState) {
               return CustomProduct(products: state.products,);
-            }else {
+            } else {
               return const Center(child: Text('Something went wrong'),);
             }
           },
+        ),
       ),
     );
   }

@@ -1,8 +1,9 @@
+import 'package:ecommerce_app/cubits/delete_products_cubit/delete_products_cubit.dart';
+import 'package:ecommerce_app/cubits/get_products_cubit/get_products_cubit.dart';
 import 'package:ecommerce_app/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/widgets/update_product_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ecommerce_app/cubits/get_products_cubit/get_products_cubit.dart';
 
 class CustomProduct extends StatelessWidget {
   const CustomProduct({super.key, required this.products});
@@ -33,7 +34,7 @@ class CustomProduct extends StatelessWidget {
                     ClipRRect(
                       borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
                       child: Image.network(
-                        productModel.imageUrl ?? '',
+                        productModel.image ?? '',
                         height: 73,
                         width: double.infinity,
                         fit: BoxFit.cover,
@@ -60,9 +61,8 @@ class CustomProduct extends StatelessWidget {
                                   TextButton(
                                     onPressed: () {
                                       Navigator.of(context).pop();
-                                      final cubit = BlocProvider.of<GetProductsCubit>(context);
-                                      cubit.deleteProduct(productModel.id!);
-                                    },
+                                      final deleteProductsCubit = BlocProvider.of<DeleteProductsCubit>(context);
+                                      deleteProductsCubit.deleteProduct(productModel.id!);},
                                     child: const Text('Delete'),
                                   ),
                                 ],
@@ -97,7 +97,7 @@ class CustomProduct extends StatelessWidget {
                           fontSize: 14,
                         ),
                       ),
-                      UpdateProductButton(product: productModel),
+                      UpdateProductButton(product: productModel,getProductsCubit:BlocProvider.of<GetProductsCubit>(context),),
                     ],
                   ),
                 ),

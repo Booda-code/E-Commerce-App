@@ -1,29 +1,44 @@
 import 'package:dio/dio.dart';
-
+import 'package:ecommerce_app/services/api_service.dart';
 import '../models/product_model.dart';
 
 class ProductService {
-  final String baseUrl = 'https://fakestoreapi.com/products';
-  final Dio dio;
-
-  ProductService(this.dio);
+  final ApiService apiService = ApiService(Dio());
 
   Future<List<ProductModel>> getProducts() async {
-
     try {
-      var response = await dio.get(baseUrl);
-      Map<String,dynamic> jsonData = response.data;
-      List<dynamic> products = jsonData['products'];
-      List<ProductModel> productList = [];
-
-      for(var product in products){
-        ProductModel productModel = ProductModel.fromJson(product);
-        productList.add(productModel);
+      final data = await apiService.get('products');
+      if (data is List) {
+        return data.map((e) => ProductModel.fromJson(e)).toList();
+      } else {
+        return [];
       }
-      return productList;
-    }  catch (e) {
+    } catch (e) {
       return [];
     }
   }
 
+  Future<void> postProduct(ProductModel product) async {
+    try {
+      await apiService.post('products', product.toJson());
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> updateProduct(ProductModel product) async {
+    try {
+      await apiService.put('products/${product.id}', product.toJson());
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> deleteProduct(int id) async {
+    try {
+      await apiService.delete('products/$id');
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
